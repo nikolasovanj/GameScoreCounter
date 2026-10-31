@@ -1,4 +1,4 @@
-﻿namespace Backend.Domain;
+﻿namespace Backend.Domain.Result.Errors;
 
 public static class UserErrors
 {

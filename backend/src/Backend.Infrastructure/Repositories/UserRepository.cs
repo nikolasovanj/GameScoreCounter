@@ -1,4 +1,4 @@
-﻿namespace Backend.Infrastructure;
+﻿namespace Backend.Infrastructure.Repositories;
 
 public class UserRepository
 {

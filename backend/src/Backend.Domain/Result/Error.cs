@@ -1,4 +1,4 @@
-﻿namespace Backend.Domain;
+﻿namespace Backend.Domain.Result;
 
 public record Error(string Code, string Description)
 {

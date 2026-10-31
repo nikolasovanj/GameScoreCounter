@@ -1,9 +1,10 @@
-﻿namespace Backend.Domain;
+﻿namespace Backend.Domain.Entities;
 
 public class ScoreComponent
 {
-    public int Id { get; set;}
-    public int MatchResultId { get; set;}
-    public string Label { get; set;} = string.Empty;
+    public Guid ComponetId { get; set;}
+    public Guid MatchResultId { get; set;}
+    public int Order { get; set;}
+    public string? Label { get; set;}
     public int Points { get; set;}
 }
