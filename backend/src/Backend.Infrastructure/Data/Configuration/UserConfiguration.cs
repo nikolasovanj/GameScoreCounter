@@ -10,6 +10,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("user");
         builder.HasKey(u => u.UserId);
+        builder.Property(i => i.UserId).ValueGeneratedNever();
+
 
         builder.Property(u => u.Username)
                .HasMaxLength(20)

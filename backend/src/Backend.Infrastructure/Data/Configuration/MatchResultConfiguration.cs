@@ -10,6 +10,8 @@ public class MatchResultConfiguration : IEntityTypeConfiguration<MatchResult>
     {
         builder.ToTable("match_results");
         builder.HasKey(r => r.MatchResultId);
+        builder.Property(i => i.MatchResultId).ValueGeneratedNever();
+
 
         builder.Property(r => r.IsWinner).IsRequired();
         builder.Property(r => r.TotalScore);

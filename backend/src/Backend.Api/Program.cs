@@ -1,6 +1,20 @@
-﻿namespace Backend.Api;
+﻿using Backend.Infrastructure;
 
-public class Program
-{
+var builder = WebApplication.CreateBuilder(args);
 
-}
+builder.Services.AddControllers();
+
+
+builder.Services
+                .AddApplication()
+                .AddInfrastructure(builder.Configuration);
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+app.Run();

@@ -10,6 +10,8 @@ public class MatchConfiguration : IEntityTypeConfiguration<Match>
     {
         builder.ToTable("matches");
         builder.HasKey(m => m.MatchId);
+        builder.Property(i => i.MatchId).ValueGeneratedNever();
+
 
         builder.Property(m => m.Game)
                .HasConversion<string>()

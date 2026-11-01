@@ -3,14 +3,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Infrastructure.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<User> Users => Set<User>();
+
     public DbSet<Match> Matches => Set<Match>();
     public DbSet<MatchResult> MatchResults => Set<MatchResult>();
+    public DbSet<ScoreComponent> ScoreComponents => Set<ScoreComponent>();
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => 
-        optionsBuilder.UseNpgsql("ConnectionString");
     protected override void OnModelCreating(ModelBuilder modelBuilder) => 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);    
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<string>().HaveMaxLength(500);
+    }
 }

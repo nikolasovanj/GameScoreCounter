@@ -10,6 +10,8 @@ public class ScoreComponentConfiguration : IEntityTypeConfiguration<ScoreCompone
     {
         builder.ToTable("score_components");
         builder.HasKey(c => c.ComponetId);
+        builder.Property(i => i.ComponetId).ValueGeneratedNever();
+
 
         builder.Property(c => c.Label)
                .HasMaxLength(100)

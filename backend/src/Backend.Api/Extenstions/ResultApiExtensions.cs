@@ -1,4 +1,4 @@
-using Backend.Domain;
+using Backend.Domain.Result;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api
