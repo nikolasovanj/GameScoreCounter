@@ -1,7 +1,9 @@
-﻿namespace Backend.Application.Interfaces.Services;
+﻿using Backend.Domain.Result;
+
+namespace Backend.Application.Interfaces.Services;
 
 public interface IUserService
 {
-    Task<UserDTO?> GetByUserIdAsync(Guid id, CancellationToken ct = default);
-    Task DeleteAsync(Guid id, CancellationToken ct = default);
+    Task<Result<UserDTO?>> GetByUserIdAsync(Guid id, CancellationToken ct = default);
+    Task<Result> DeleteAsync(Guid id, CancellationToken ct = default);
 }

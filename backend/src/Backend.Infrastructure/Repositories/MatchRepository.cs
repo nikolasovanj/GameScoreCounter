@@ -1,34 +1,44 @@
+using System.Collections.Immutable;
 using Backend.Application.Interfaces.Repositories;
 using Backend.Domain.Entities;
 using Backend.Domain.Enums;
+using Backend.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Infrastructure.Repositories
 {
-    public class MatchRepository : IMatchRepository
+    public class MatchRepository(AppDbContext db) : IMatchRepository
     {
-        public Task AddAsync(Match match, CancellationToken ct = default)
+        public async Task AddAsync(Match match, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            db.Matches.Add(match);
+            await db.SaveChangesAsync(ct);
         }
 
-        public Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var rows = await db.Matches.Where(m => m.MatchId.Equals(id)).ExecuteDeleteAsync(ct);
+            return rows > 0;
         }
 
-        public Task<Match?> GetByMatchIdAsync(Guid id, CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Match?> GetByMatchIdAsync(Guid id, CancellationToken ct = default) =>
+            db.Matches
+              .Include(m => m.Results).ThenInclude(r => r.ScoreComponents)
+              .AsSplitQuery()
+              .FirstOrDefaultAsync(m => m.MatchId.Equals(id), ct);
 
-        public Task<IReadOnlyList<Match>> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IReadOnlyList<Match>> GetByUserIdAsync(Guid userId, CancellationToken ct = default) =>
+            await db.Matches
+                    .Include(m => m.Results).ThenInclude(r => r.ScoreComponents)
+                    .AsSplitQuery()
+                    .Where(m => m.Results.Any(r => r.UserId.Equals(userId)))
+                    .ToListAsync(ct);
 
-        public Task<IReadOnlyList<Match>> GetByUserIdForGameAsync(Guid userId, GameType game, CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IReadOnlyList<Match>> GetByUserIdForGameAsync(Guid userId, GameType game, CancellationToken ct = default) =>
+                await db.Matches
+                    .Include(m => m.Results).ThenInclude(r => r.ScoreComponents)
+                    .AsSplitQuery()
+                    .Where(m => m.Game == game && m.Results.Any(r => r.UserId.Equals(userId)))
+                    .ToListAsync(ct);
     }
 }

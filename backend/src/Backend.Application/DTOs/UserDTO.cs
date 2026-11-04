@@ -1,6 +1,3 @@
 ﻿namespace Backend.Application;
 
-public class UserDTO
-{
-
-}
+public record UserDTO(Guid Id, string Username);

@@ -1,17 +1,19 @@
 ﻿using Backend.Application.Interfaces.Repositories;
 using Backend.Domain.Entities;
+using Backend.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Infrastructure.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository(AppDbContext db) : IUserRepository
 {
-    public Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        var rows = await db.Users.Where(m => m.UserId.Equals(id)).ExecuteDeleteAsync(ct);
+        return rows > 0;
     }
 
-    public Task<User?> GetByUserIdAsync(Guid id, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
+    public Task<User?> GetByUserIdAsync(Guid id, CancellationToken ct) => 
+        db.Users.Where(u => u.UserId.Equals(id)).FirstOrDefaultAsync(ct);
+    
 }

@@ -1,3 +1,3 @@
 namespace Backend.Application.DTOs.Responses;
 
-public record AuthResponse();
+public record AuthResponse(string token);
