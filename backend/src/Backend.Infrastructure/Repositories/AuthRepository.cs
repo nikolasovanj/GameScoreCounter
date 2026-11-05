@@ -8,13 +8,11 @@ namespace Backend.Infrastructure.Repositories;
 
 public class AuthRepository(AppDbContext db) : IAuthRepository
 {
-    public Task<User?> Login(LoginRequest request, CancellationToken ct = default) =>
-        db.Users.FirstOrDefaultAsync(u => u.Username.Equals(request.Username) && u.PasswordHash.Equals(request.Password), ct);
-    
+    public Task<User?> GetExisting(string username, CancellationToken ct = default) => db.Users.Where(u => u.Username.Equals(username)).FirstOrDefaultAsync(ct);
 
     public async Task<User?> Register(User user, CancellationToken ct = default)
     {
-        var saved = db.Users.Add(user);
+        var saved = await db.Users.AddAsync(user, ct);
         await db.SaveChangesAsync(ct);
         return saved.Entity;
     }

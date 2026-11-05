@@ -5,6 +5,6 @@ namespace Backend.Application.Interfaces.Repositories;
 
 public interface IAuthRepository
 {
-    Task<User?> Login(LoginRequest request, CancellationToken ct = default);
     Task<User?> Register(User user, CancellationToken ct = default);
+    Task<User?> GetExisting(string username, CancellationToken ct = default);
 }

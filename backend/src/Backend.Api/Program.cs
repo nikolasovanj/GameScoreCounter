@@ -1,10 +1,59 @@
-﻿using Backend.Application;
+﻿using System.Text;
+using Backend.Application;
 using Backend.Infrastructure;
+using Backend.Infrastructure.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>() 
+    ?? throw new InvalidOperationException("Missing jwt configuration section.");
+if(string.IsNullOrWhiteSpace(jwt.SigningKey) || jwt.SigningKey.Length < 32)
+    throw new InvalidOperationException("Jwt:SigningKey must be atleast 32 characters.");
 
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        o.MapInboundClaims = false;
+        o.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidIssuer = jwt.Issuer,
+            ValidAudience = jwt.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.SigningKey)),
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.FromSeconds(30)
+        };   
+    });    
+builder.Services.AddAuthorization();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Game score counter API", Version = "v1"});
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Description = "Enter Bearer <your token>."
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 builder.Services
                 .AddApplication()
@@ -12,6 +61,12 @@ builder.Services
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger(c => c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0);
+    app.UseSwaggerUI();      // UI at /swagger
+
+}
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

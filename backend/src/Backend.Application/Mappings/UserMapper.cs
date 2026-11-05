@@ -7,11 +7,11 @@ public static class UserMapper
 {
     public static UserDTO ToDto(this User user) => 
         new(user.UserId, user.Username);
-    public static User ToEntity(this CreateUserRequest request) => new() 
+    public static User ToEntity(this RegisterRequest request, string passwordHash) => new() 
     { 
         UserId = Guid.NewGuid(), 
-        Username = request.Username, 
-        PasswordHash = request.PasswordHash
+        Username = request.Username,
+        PasswordHash = passwordHash
     };
 
 }

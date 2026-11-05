@@ -15,5 +15,7 @@ public class UserRepository(AppDbContext db) : IUserRepository
 
     public Task<User?> GetByUserIdAsync(Guid id, CancellationToken ct) => 
         db.Users.Where(u => u.UserId.Equals(id)).FirstOrDefaultAsync(ct);
-    
+
+    public Task<User?> GetByUsernameAsync(string username, CancellationToken ct) => 
+        db.Users.Where(u => u.Username.Equals(username)).FirstOrDefaultAsync(ct);
 }
