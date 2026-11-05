@@ -16,7 +16,7 @@ public class CatanScoring : IScoringRule
         if(result.TotalScore is null)
             return Result.Failure(MatchResultErrors.ScoreIsNull);
         if(result.TotalScore < 0)
-            return Result.Failure(MatchResultErrors.ScoreIsNull);
+            return Result.Failure(MatchResultErrors.ScoreIsNegative);
         if(result.ScoreComponents.Count > 0)
             return Result.Failure(MatchResultErrors.TooManyComponents(Game));
         

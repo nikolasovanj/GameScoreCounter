@@ -13,7 +13,7 @@ public class UserService(IUserRepository userRepository) : IUserService
     public async Task<Result> DeleteAsync(Guid id, CancellationToken ct = default)
     {
         if(!await _repo.DeleteAsync(id, ct))
-            return Result.Failure(MatchErrors.NotFound);
+            return MatchErrors.NotFound;
         return Result.Success();
     }
 
@@ -21,8 +21,8 @@ public class UserService(IUserRepository userRepository) : IUserService
     {
         var user = await _repo.GetByUserIdAsync(id, ct);
         if(user is null)
-            return Result<UserDTO?>.Failure(UserErrors.NotFound);
-        return Result<UserDTO?>.Success(user.ToDto());
+            return UserErrors.NotFound;
+        return user.ToDto();
 
     }
 }

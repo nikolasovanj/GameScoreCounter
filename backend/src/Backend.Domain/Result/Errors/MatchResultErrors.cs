@@ -14,6 +14,8 @@ public static class MatchResultErrors
         Error.Validation("MatchResult.TooManyComponents", $"Match result for {game} has too many components");
     public static Error NoComponents => 
         Error.Validation("MatchResult.NoComponents", "Match result has no components.");
+    public static Error TooLittleComponents(GameType game) => 
+        Error.Validation("MatchResult.ToLittleComponents", $"Match result for {game} has to little components.");
     public static Error ComponentsAreNotUnique => 
         Error.Validation("MatchResult.ComponentsNotUnique", "Match result components are not unique.");
     public static Error ScoreAlreadyCalculated => 

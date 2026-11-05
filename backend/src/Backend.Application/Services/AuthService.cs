@@ -15,23 +15,19 @@ public class AuthService(IAuthRepository authRepository) : IAuthService
     {
         var user = await _repo.Login(request, ct);
         if(user is null)
-            return Result<AuthResponse>.Failure(UserErrors.NotFound);
+            return UserErrors.NotFound;
 
         var token = user.Username;
-        return Result<AuthResponse>.Success(
-            new AuthResponse(token)
-        );
+        return new AuthResponse(token);
     }
 
     public async Task<Result<AuthResponse>> Register(CreateUserRequest request, CancellationToken ct = default)
     {
         var user = await _repo.Register(request.ToEntity(), ct);
         if(user is null)
-            return Result<AuthResponse>.Failure(UserErrors.NotFound);
+            return UserErrors.NotFound;
 
         var token = user.Username;
-        return Result<AuthResponse>.Success(
-            new AuthResponse(token)
-        );
+        return new AuthResponse(token);
     }
 }

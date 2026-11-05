@@ -1,4 +1,5 @@
-﻿using Backend.Infrastructure;
+﻿using Backend.Application;
+using Backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

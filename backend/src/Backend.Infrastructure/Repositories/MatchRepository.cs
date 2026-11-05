@@ -27,12 +27,6 @@ namespace Backend.Infrastructure.Repositories
               .AsSplitQuery()
               .FirstOrDefaultAsync(m => m.MatchId.Equals(id), ct);
 
-        public async Task<IReadOnlyList<Match>> GetByUserIdAsync(Guid userId, CancellationToken ct = default) =>
-            await db.Matches
-                    .Include(m => m.Results).ThenInclude(r => r.ScoreComponents)
-                    .AsSplitQuery()
-                    .Where(m => m.Results.Any(r => r.UserId.Equals(userId)))
-                    .ToListAsync(ct);
 
         public async Task<IReadOnlyList<Match>> GetByUserIdForGameAsync(Guid userId, GameType game, CancellationToken ct = default) =>
                 await db.Matches
