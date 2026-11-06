@@ -16,4 +16,12 @@ public class AuthRepository(AppDbContext db) : IAuthRepository
         await db.SaveChangesAsync(ct);
         return saved.Entity;
     }
+
+    public async Task<User?> Rehash(User user, string newHash, CancellationToken ct = default)
+    {
+        var update = await db.Users.FirstOrDefaultAsync(u => u.UserId.Equals(user.UserId), ct);
+        update!.PasswordHash = newHash;
+        await db.SaveChangesAsync(ct);
+        return update;
+    }
 }

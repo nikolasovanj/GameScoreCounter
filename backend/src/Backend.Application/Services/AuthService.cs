@@ -23,6 +23,11 @@ public class AuthService(
         if(user is null || !_hasher.Verify(user.PasswordHash, request.Password, out var needsRehash))
             return UserErrors.InvalidCredentials;
 
+        if(needsRehash)
+        {
+            user = await _repo.Rehash(user, _hasher.Hash(request.Password), ct);
+        }
+
         return new AuthResponse(_jwt.CreateAccessToken(user));
     }
 

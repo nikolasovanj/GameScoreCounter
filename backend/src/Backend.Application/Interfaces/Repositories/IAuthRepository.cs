@@ -7,4 +7,5 @@ public interface IAuthRepository
 {
     Task<User?> Register(User user, CancellationToken ct = default);
     Task<User?> GetExisting(string username, CancellationToken ct = default);
+    Task<User?> Rehash(User user, string newHash, CancellationToken ct = default);
 }
