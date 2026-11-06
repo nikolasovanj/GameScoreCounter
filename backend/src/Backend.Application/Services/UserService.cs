@@ -17,7 +17,7 @@ public class UserService(IUserRepository userRepository) : IUserService
         return Result.Success();
     }
 
-    public async Task<Result<UserDTO?>> GetByUsenameAsync(string username, CancellationToken ct = default)
+    public async Task<Result<UserDTO>> GetByUsenameAsync(string username, CancellationToken ct = default)
     {
         var user = await _repo.GetByUsernameAsync(username, ct);
         if(user is null)
@@ -26,7 +26,7 @@ public class UserService(IUserRepository userRepository) : IUserService
         return user.ToDto();
     }
 
-    public async Task<Result<UserDTO?>> GetByUserIdAsync(Guid id, CancellationToken ct = default)
+    public async Task<Result<UserDTO>> GetByUserIdAsync(Guid id, CancellationToken ct = default)
     {
         var user = await _repo.GetByUserIdAsync(id, ct);
         if(user is null)

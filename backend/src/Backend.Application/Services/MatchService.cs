@@ -17,7 +17,7 @@ public class MatchService(IMatchRepository matchRepository, IEnumerable<IScoring
     private readonly Dictionary<GameType, IScoringRule> _rules = rules.ToDictionary(r => r.Game);
     public async Task<Result<MatchResponse>> CreateAsync(CreateMatchRequest request, CancellationToken ct = default)
     {
-        if(_rules.TryGetValue(request.Game, out var rule))
+        if(!_rules.TryGetValue(request.Game, out var rule))
             return MatchErrors.NoRuleForGame(request.Game);
         if(request.Results.Count <= 0)
             return MatchErrors.NoResults;
