@@ -26,6 +26,8 @@ public class AuthService(
         if(needsRehash)
         {
             user = await _repo.Rehash(user, _hasher.Hash(request.Password), ct);
+            if(user is null)
+                return UserErrors.InvalidCredentials;
         }
 
         return new AuthResponse(_jwt.CreateAccessToken(user));
