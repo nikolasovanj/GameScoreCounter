@@ -12,6 +12,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<MatchResult> MatchResults => Set<MatchResult>();
     public DbSet<ScoreComponent> ScoreComponents => Set<ScoreComponent>();
 
+    public DbSet<Schedule> Schedules => Set<Schedule>();
+    public DbSet<Invitation> Invitations => Set<Invitation>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder) => 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
