@@ -7,4 +7,5 @@ public interface IUserRepository
     Task<User?> GetByUserIdAsync(Guid id, CancellationToken ct);
     Task<User?> GetByUsernameAsync(string username, CancellationToken ct);
     Task<bool> DeleteAsync(Guid id, CancellationToken ct = default);
+    Task<bool> ExistsAsync(Guid id, CancellationToken ct = default);
 }
