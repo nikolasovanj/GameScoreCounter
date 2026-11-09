@@ -21,7 +21,7 @@ public class Result
     public static Result Failure(Error error) => new(false, error);
 
     // Implicit conversion from Error to Result
-    public static implicit operator Result(Error error) => Failure(error);
+    public static implicit operator Result(Error error) => Failure(error); 
 }
 
 public class Result<TValue> : Result

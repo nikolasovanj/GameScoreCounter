@@ -7,7 +7,7 @@ namespace Backend.Application.Interfaces.Services;
 
 public interface IScheduleService
 {
-    Task<Result<ScheduleResponse>> CreateAsync(Guid organizatorId, CreateScheduleRequest request, CancellationToken ct = default);
+    Task<Result<ScheduleResponse>> CreateAsync(Guid organizerId, CreateScheduleRequest request, CancellationToken ct = default);
     Task<Result<ScheduleResponse>> GetAsync(Guid scheduleId, Guid requesterId, CancellationToken ct = default);
     Task<Result<IReadOnlyList<ScheduleResponse>>> ListMineAsync(Guid playerId, CancellationToken ct = default);
     Task<Result<ScheduleResponse>> InviteAsync(Guid scheduleId, Guid organizerId, InviteRequest request, CancellationToken ct = default);

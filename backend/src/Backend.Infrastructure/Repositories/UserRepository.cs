@@ -13,11 +13,6 @@ public class UserRepository(AppDbContext db) : IUserRepository
         return rows > 0;
     }
 
-    public async Task<bool> ExistsAsync(Guid id, CancellationToken ct = default)
-    {
-        return await db.Users.AnyAsync(u => u.UserId.Equals(id), ct);
-    }
-
     public Task<User?> GetByUserIdAsync(Guid id, CancellationToken ct) => 
         db.Users.Where(u => u.UserId.Equals(id)).FirstOrDefaultAsync(ct);
 

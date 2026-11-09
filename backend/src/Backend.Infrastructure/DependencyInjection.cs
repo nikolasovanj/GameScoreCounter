@@ -22,6 +22,10 @@ public static class DependencyInjection
         services.AddScoped<IAuthRepository, AuthRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IMatchRepository, MatchRepository>();
+        services.AddScoped<IFollowRepository, FollowRepository>();
+        services.AddScoped<IScheduleRepository, ScheduleRepository>();
+        services.AddScoped<IUserLookup, UserLookup>();
+        services.AddSingleton(TimeProvider.System);
 
         services.Configure<PasswordHasherOptions>(o => o.IterationCount = 210_000);
         services.AddSingleton<IPasswordService, PasswordService>();

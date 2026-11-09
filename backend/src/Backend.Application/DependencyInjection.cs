@@ -16,6 +16,8 @@ public static class DependencyInjection
         services.AddScoped<IMatchService, MatchService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IFollowService, FollowService>();
+        services.AddScoped<IScheduleService, ScheduleService>();
  
         return services;
     }
