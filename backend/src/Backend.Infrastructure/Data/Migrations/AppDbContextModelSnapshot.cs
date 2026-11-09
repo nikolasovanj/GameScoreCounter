@@ -22,6 +22,69 @@ namespace Backend.Infrastructure.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Backend.Domain.Entities.Follow", b =>
+                {
+                    b.Property<Guid>("FollowerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("follower_id");
+
+                    b.Property<Guid>("FolloweeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("followee_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.HasKey("FollowerId", "FolloweeId")
+                        .HasName("pk_follows");
+
+                    b.HasIndex("FolloweeId")
+                        .HasDatabaseName("ix_follows_followee_id");
+
+                    b.ToTable("follows", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_follow_not_self", "\"follower_id\" <> \"followee_id\"");
+                        });
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Invitation", b =>
+                {
+                    b.Property<Guid>("InvitationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("invitation_id");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
+
+                    b.Property<DateTime?>("RespondedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("responded_at");
+
+                    b.Property<Guid>("ScheduleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("schedule_id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("status");
+
+                    b.HasKey("InvitationId")
+                        .HasName("pk_invitations");
+
+                    b.HasIndex("PlayerId", "Status")
+                        .HasDatabaseName("ix_invitations_player_id_status");
+
+                    b.HasIndex("ScheduleId", "PlayerId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_invitations_schedule_id_player_id");
+
+                    b.ToTable("invitations", (string)null);
+                });
+
             modelBuilder.Entity("Backend.Domain.Entities.Match", b =>
                 {
                     b.Property<Guid>("MatchId")
@@ -82,6 +145,60 @@ namespace Backend.Infrastructure.Data.Migrations
                     b.ToTable("match_results", (string)null);
                 });
 
+            modelBuilder.Entity("Backend.Domain.Entities.Schedule", b =>
+                {
+                    b.Property<Guid>("ScheduleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("schedule_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Game")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("game");
+
+                    b.Property<string>("Location")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("location");
+
+                    b.Property<Guid?>("MatchId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("match_id");
+
+                    b.Property<DateTime>("MatchTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("match_time");
+
+                    b.Property<Guid>("OrganizerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("organizer_id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("status");
+
+                    b.HasKey("ScheduleId")
+                        .HasName("pk_schedules");
+
+                    b.HasIndex("MatchId")
+                        .HasDatabaseName("ix_schedules_match_id");
+
+                    b.HasIndex("MatchTime")
+                        .HasDatabaseName("ix_schedules_match_time");
+
+                    b.HasIndex("OrganizerId", "MatchTime")
+                        .HasDatabaseName("ix_schedules_organizer_id_match_time");
+
+                    b.ToTable("schedules", (string)null);
+                });
+
             modelBuilder.Entity("Backend.Domain.Entities.ScoreComponent", b =>
                 {
                     b.Property<Guid>("ComponetId")
@@ -140,6 +257,40 @@ namespace Backend.Infrastructure.Data.Migrations
                     b.ToTable("user", (string)null);
                 });
 
+            modelBuilder.Entity("Backend.Domain.Entities.Follow", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("FolloweeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_follows_users_followee_id");
+
+                    b.HasOne("Backend.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_follows_users_follower_id");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Invitation", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_invitations_users_player_id");
+
+                    b.HasOne("Backend.Domain.Entities.Schedule", null)
+                        .WithMany("Invitations")
+                        .HasForeignKey("ScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_invitations_schedules_schedule_id");
+                });
+
             modelBuilder.Entity("Backend.Domain.Entities.MatchResult", b =>
                 {
                     b.HasOne("Backend.Domain.Entities.Match", null)
@@ -155,6 +306,22 @@ namespace Backend.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_match_results_users_user_id");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Schedule", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Match", null)
+                        .WithMany()
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_schedules_matches_match_id");
+
+                    b.HasOne("Backend.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("OrganizerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_schedules_users_organizer_id");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.ScoreComponent", b =>
@@ -175,6 +342,11 @@ namespace Backend.Infrastructure.Data.Migrations
             modelBuilder.Entity("Backend.Domain.Entities.MatchResult", b =>
                 {
                     b.Navigation("ScoreComponents");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Schedule", b =>
+                {
+                    b.Navigation("Invitations");
                 });
 #pragma warning restore 612, 618
         }
