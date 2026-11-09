@@ -16,15 +16,15 @@ public class UserController(IUserService userService) : ControllerBase
     private readonly IUserService _users = userService;
     
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete([FromRoute] Guid id, CancellationToken ct) => 
+    public async Task<ActionResult<ApiResponse>> Delete([FromRoute] Guid id, CancellationToken ct) => 
         (await _users.DeleteAsync(id, ct)).ToApiResult();
 
     [HttpGet("id/{id}")]
-    public async Task<ActionResult<UserDTO>> GetById([FromRoute]Guid id, CancellationToken ct) => 
+    public async Task<ActionResult<ApiResponse<UserDTO>>> GetById([FromRoute]Guid id, CancellationToken ct) => 
         (await _users.GetByUserIdAsync(id, ct)).ToApiResult();
 
     [HttpGet("username/{username}")]
     [AllowAnonymous]
-    public async Task<ActionResult<UserDTO>> GetByUsername([FromRoute] string username, CancellationToken ct) => 
+    public async Task<ActionResult<ApiResponse<UserDTO>>> GetByUsername([FromRoute] string username, CancellationToken ct) => 
         (await _users.GetByUsenameAsync(username, ct)).ToApiResult();
 }

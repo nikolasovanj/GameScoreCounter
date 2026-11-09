@@ -13,12 +13,12 @@ namespace Backend.Api.Controllers
         private readonly IAuthService _auth = authService;
         
         [HttpPost("login")]
-        public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request, CancellationToken ct) => 
+        public async Task<ActionResult<ApiResponse<AuthResponse>>> Login([FromBody] LoginRequest request, CancellationToken ct) => 
             (await _auth.Login(request, ct)).ToApiResult();
         
 
         [HttpPost("register")]
-        public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterRequest request, CancellationToken ct) => 
+        public async Task<ActionResult<ApiResponse<AuthResponse>>> Register([FromBody] RegisterRequest request, CancellationToken ct) => 
             (await _auth.Register(request, ct)).ToApiResult();
         
     }
