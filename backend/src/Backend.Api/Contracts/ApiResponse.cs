@@ -1,8 +1,6 @@
-using Backend.Api.Extenstions;
 using Backend.Domain.Result;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Api;
+namespace Backend.Api.Contracts;
 
 public record ApiResponse(bool Success, string? Message);
 public record ApiResponse<T>(T Data) : ApiResponse(true, null);

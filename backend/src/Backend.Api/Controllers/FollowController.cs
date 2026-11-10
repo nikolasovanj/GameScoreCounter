@@ -1,3 +1,4 @@
+using Backend.Api.Contracts;
 using Backend.Api.Extenstions;
 using Backend.Application.Interfaces.Services;
 using Backend.Domain.Entities;
