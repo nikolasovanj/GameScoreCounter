@@ -1,4 +1,5 @@
 ﻿using Backend.Application.Common;
+using Backend.Application.DTOs;
 using Backend.Application.Interfaces.Repositories;
 using Backend.Application.Interfaces.Services;
 using Backend.Application.Mappings;
@@ -18,10 +19,8 @@ public class UserService(IUserRepository userRepository) : IUserService
         return Result.Success();
     }
 
-    public Task<Result<PagedResult<UserDTO>>> GetAllAsync(PageRequest request, CancellationToken ct = default)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<Result<PagedResult<UserDTO>>> GetAllAsync(PageRequest request, CancellationToken ct = default) => 
+        (await _repo.GetAllAsync(request, ct)).Map(UserMapper.ToDto);
 
     public async Task<Result<UserDTO>> GetByUsenameAsync(string username, CancellationToken ct = default)
     {
@@ -37,7 +36,7 @@ public class UserService(IUserRepository userRepository) : IUserService
         var user = await _repo.GetByUserIdAsync(id, ct);
         if(user is null)
             return UserErrors.NotFound;
+        
         return user.ToDto();
-
     }
 }

@@ -1,6 +1,7 @@
 using Backend.Api.Contracts;
 using Backend.Api.Extenstions;
-using Backend.Application;
+using Backend.Application.Common;
+using Backend.Application.DTOs;
 using Backend.Application.Interfaces.Services;
 using Backend.Application.Services;
 using Backend.Domain.Result;
@@ -28,4 +29,7 @@ public class UserController(IUserService userService) : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<ApiResponse<UserDTO>>> GetByUsername([FromRoute] string username, CancellationToken ct) => 
         (await _users.GetByUsenameAsync(username, ct)).ToApiResult();
+    [HttpGet]
+    public async Task<ActionResult<ApiResponse<PagedResult<UserDTO>>>> GetAll([FromQuery] PageRequest request, CancellationToken ct) =>
+        (await _users.GetAllAsync(request, ct)).ToApiResult();
 }

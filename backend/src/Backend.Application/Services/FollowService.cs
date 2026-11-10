@@ -1,6 +1,8 @@
 using Backend.Application.Common;
+using Backend.Application.DTOs;
 using Backend.Application.Interfaces.Repositories;
 using Backend.Application.Interfaces.Services;
+using Backend.Application.Mappings;
 using Backend.Domain.Result;
 using Backend.Domain.Result.Errors;
 
@@ -21,15 +23,11 @@ public class FollowService(IFollowRepository followRepository, IUserLookup userL
         return Result.Success();
     }
 
-    public Task<Result<PagedResult<UserDTO>>> GetFollowersAsync(Guid userId, PageRequest request, CancellationToken ct = default)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<Result<PagedResult<UserDTO>>> GetFollowersAsync(Guid userId, PageRequest request, CancellationToken ct = default) => 
+        (await _follows.GetFollowersAsync(userId, request, ct)).Map(UserMapper.ToDto);
 
-    public Task<Result<PagedResult<UserDTO>>> GetFollowingAsync(Guid userId, PageRequest request, CancellationToken ct = default)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<Result<PagedResult<UserDTO>>> GetFollowingAsync(Guid userId, PageRequest request, CancellationToken ct = default) => 
+        (await _follows.GetFollowingAsync(userId, request, ct)).Map(UserMapper.ToDto);
 
     public async Task<Result> UnfollowAsync(Guid me, Guid target, CancellationToken ct = default)
     {

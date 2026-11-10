@@ -1,4 +1,5 @@
 ﻿using Backend.Application.Common;
+using Backend.Application.DTOs;
 using Backend.Domain.Result;
 
 namespace Backend.Application.Interfaces.Services;

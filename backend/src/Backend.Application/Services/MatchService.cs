@@ -1,4 +1,5 @@
 using Backend.Application.Common;
+using Backend.Application.DTOs;
 using Backend.Application.DTOs.Requests;
 using Backend.Application.DTOs.Responses;
 using Backend.Application.Interfaces.Repositories;
@@ -81,8 +82,17 @@ public class MatchService(IMatchRepository matchRepository, IEnumerable<IScoring
         return match.ToResponse();
     }
 
-    public Task<Result<PagedResult<MatchResponse>>> GetForUserByGameAsync(Guid userId, GameType game, PageRequest request, CancellationToken ct = default)
+    public async Task<Result<PagedResult<MatchResponse>>> GetForUserByGameAsync(Guid userId, GameType game, PageRequest request, CancellationToken ct = default)
     {
-        throw new NotImplementedException();
+        return (await _repo.GetByUserIdForGameAsync(userId, game, request, ct)).Map(MatchMapper.ToResponse);
+    }
+
+    public async Task<Result<PagedResult<PlayerMatchResultDTO>>> GetPlayerResultsAsync(Guid userId, GameType game, PageRequest request, CancellationToken ct = default)
+    {
+        var res = await _repo.PlayerResultByGameAsync(userId, game, request, ct);
+        Console.WriteLine("Test");
+        Console.WriteLine(res.Items.Count);
+        
+        return res;
     }
 }

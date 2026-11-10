@@ -1,4 +1,5 @@
-﻿using Backend.Application.Interfaces.Repositories;
+﻿using Backend.Application.Common;
+using Backend.Application.Interfaces.Repositories;
 using Backend.Domain.Entities;
 using Backend.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,9 @@ public class UserRepository(AppDbContext db) : IUserRepository
         var rows = await db.Users.Where(m => m.UserId.Equals(id)).ExecuteDeleteAsync(ct);
         return rows > 0;
     }
+
+    public Task<PagedResult<User>> GetAllAsync(PageRequest page, CancellationToken ct = default) =>
+        db.Users.AsNoTracking().OrderByDescending(u => u.Username).ToPagedResultAsync(page, ct);
 
     public Task<User?> GetByUserIdAsync(Guid id, CancellationToken ct) => 
         db.Users.Where(u => u.UserId.Equals(id)).FirstOrDefaultAsync(ct);

@@ -1,4 +1,5 @@
-﻿using Backend.Application.DTOs.Requests;
+﻿using Backend.Application.DTOs;
+using Backend.Application.DTOs.Requests;
 using Backend.Domain.Entities;
 
 namespace Backend.Application.Mappings;

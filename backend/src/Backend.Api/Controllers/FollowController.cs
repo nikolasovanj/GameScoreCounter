@@ -1,9 +1,12 @@
 using Backend.Api.Contracts;
 using Backend.Api.Extenstions;
+using Backend.Application.Common;
+using Backend.Application.DTOs;
 using Backend.Application.Interfaces.Services;
 using Backend.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Backend.Api.Controllers;
 
@@ -26,4 +29,12 @@ public class FollowController(IFollowService followService) : ControllerBase
         var result = await followService.UnfollowAsync(follower, id, ct);
         return result.ToApiResult();
     }
+
+    [HttpGet("followers")]
+    public async Task<ActionResult<ApiResponse<PagedResult<UserDTO>>>> GetFollowers([FromQuery] PageRequest request, CancellationToken ct) => 
+        (await followService.GetFollowersAsync(User.GetUserId(), request, ct)).ToApiResult();
+
+    [HttpGet("following")]
+    public async Task<ActionResult<ApiResponse<PagedResult<UserDTO>>>> GetFollowing([FromQuery] PageRequest request, CancellationToken ct) =>
+        (await followService.GetFollowingAsync(User.GetUserId(), request, ct)).ToApiResult();
 }

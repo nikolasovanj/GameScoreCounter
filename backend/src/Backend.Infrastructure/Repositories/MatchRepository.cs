@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using Backend.Application.Common;
+using Backend.Application.DTOs;
 using Backend.Application.Interfaces.Repositories;
 using Backend.Domain.Entities;
 using Backend.Domain.Enums;
@@ -29,16 +30,33 @@ namespace Backend.Infrastructure.Repositories
               .FirstOrDefaultAsync(m => m.MatchId.Equals(id), ct);
 
 
-        public async Task<IReadOnlyList<Match>> GetByUserIdForGameAsync(Guid userId, GameType game, CancellationToken ct = default) =>
-                await db.Matches
+        public Task<PagedResult<Match>> GetByUserIdForGameAsync(Guid userId, GameType game, PageRequest page, CancellationToken ct = default) =>
+                db.Matches
                     .Include(m => m.Results).ThenInclude(r => r.ScoreComponents)
                     .AsSplitQuery()
                     .Where(m => m.Game == game && m.Results.Any(r => r.UserId.Equals(userId)))
-                    .ToListAsync(ct);
+                    .ToPagedResultAsync(page, ct);
 
-        public Task<PagedResult<Match>> GetByUserIdForGameAsync(Guid userId, GameType game, PageRequest request, CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        
+        public Task<PagedResult<PlayerMatchResultDTO>> PlayerResultByGameAsync(Guid userId, GameType game, PageRequest page, CancellationToken ct = default) =>
+            db.MatchResults.AsNoTracking()
+                .Where(r => r.UserId.Equals(userId))
+                .Join(db.Matches.Where(m => m.Game == game), 
+                r => r.MatchId,
+                m => m.MatchId,
+                (r, m) => new { Result = r, Match = m})
+                .OrderByDescending(x => x.Match.PlayedAt)
+                .ThenBy(x => x.Match.MatchId)
+                .Select(x => new PlayerMatchResultDTO(
+                    x.Match.MatchId,
+                    x.Match.Game,
+                    x.Match.PlayedAt,
+                    x.Result.IsWinner,
+                    x.Result.TotalScore,
+                    x.Result.ScoreComponents
+                        .OrderBy(c => c.Order)
+                        .Select(c => new ScoreComponentDTO(c.Order, c.Label, c.Points))
+                        .ToList()
+                )).ToPagedResultAsync(page, ct);
     }
 }
