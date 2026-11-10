@@ -1,5 +1,6 @@
 using Backend.Api.Contracts;
 using Backend.Api.Extenstions;
+using Backend.Application.Common;
 using Backend.Application.DTOs.Requests;
 using Backend.Application.DTOs.Responses;
 using Backend.Application.Interfaces.Services;
@@ -24,8 +25,8 @@ public class MatchController(IMatchService matchService) : ControllerBase
         (await _matches.GetByIdAsync(id, ct)).ToApiResult();
 
     [HttpGet("user/{userId}")]
-    public async Task<ActionResult<ApiResponse<IReadOnlyList<MatchResponse>>>> GetForUser ([FromRoute] Guid userId, [FromQuery] GameType game, CancellationToken ct) => 
-        (await _matches.GetForUserByGameAsync(userId, game, ct)).ToApiResult();
+    public async Task<ActionResult<ApiResponse<IReadOnlyList<MatchResponse>>>> GetForUser ([FromRoute] Guid userId, [FromQuery] GameType game, [FromQuery] PageRequest request, CancellationToken ct) => 
+        (await _matches.GetForUserByGameAsync(userId, game, request, ct)).ToApiResult();
 
     [HttpDelete("{id}")]
     public async Task<ActionResult<ApiResponse>> Delete([FromRoute] Guid id, CancellationToken ct) => 

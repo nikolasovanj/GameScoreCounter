@@ -1,3 +1,4 @@
+using Backend.Application.Common;
 using Backend.Application.Interfaces.Repositories;
 using Backend.Application.Interfaces.Services;
 using Backend.Domain.Result;
@@ -18,6 +19,16 @@ public class FollowService(IFollowRepository followRepository, IUserLookup userL
 
         await _follows.AddIfMissingAsync(me, target, ct);
         return Result.Success();
+    }
+
+    public Task<Result<PagedResult<UserDTO>>> GetFollowersAsync(Guid userId, PageRequest request, CancellationToken ct = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Result<PagedResult<UserDTO>>> GetFollowingAsync(Guid userId, PageRequest request, CancellationToken ct = default)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<Result> UnfollowAsync(Guid me, Guid target, CancellationToken ct = default)

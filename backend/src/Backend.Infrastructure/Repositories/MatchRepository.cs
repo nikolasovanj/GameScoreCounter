@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using Backend.Application.Common;
 using Backend.Application.Interfaces.Repositories;
 using Backend.Domain.Entities;
 using Backend.Domain.Enums;
@@ -34,5 +35,10 @@ namespace Backend.Infrastructure.Repositories
                     .AsSplitQuery()
                     .Where(m => m.Game == game && m.Results.Any(r => r.UserId.Equals(userId)))
                     .ToListAsync(ct);
+
+        public Task<PagedResult<Match>> GetByUserIdForGameAsync(Guid userId, GameType game, PageRequest request, CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

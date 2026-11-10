@@ -1,4 +1,5 @@
-﻿using Backend.Application.Interfaces.Repositories;
+﻿using Backend.Application.Common;
+using Backend.Application.Interfaces.Repositories;
 using Backend.Application.Interfaces.Services;
 using Backend.Application.Mappings;
 using Backend.Domain.Result;
@@ -15,6 +16,11 @@ public class UserService(IUserRepository userRepository) : IUserService
         if(!await _repo.DeleteAsync(id, ct))
             return MatchErrors.NotFound;
         return Result.Success();
+    }
+
+    public Task<Result<PagedResult<UserDTO>>> GetAllAsync(PageRequest request, CancellationToken ct = default)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<Result<UserDTO>> GetByUsenameAsync(string username, CancellationToken ct = default)
