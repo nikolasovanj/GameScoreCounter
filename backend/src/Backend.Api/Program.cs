@@ -13,6 +13,7 @@ var jwt = builder.Configuration.GetSection("Jwt").Get<JwtOptions>()
 if(string.IsNullOrWhiteSpace(jwt.SigningKey) || jwt.SigningKey.Length < 32)
     throw new InvalidOperationException("Jwt:SigningKey must be atleast 32 characters.");
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o =>

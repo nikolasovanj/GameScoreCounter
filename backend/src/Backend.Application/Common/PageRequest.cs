@@ -8,7 +8,7 @@ public record PageRequest
     public int Page { get; init; } = 1;
     public int PageSize { get; init; } = DefaultPageSize;
 
-    public int SafePage => Math.Max(Page, 1);
-    public int SafePageSize => Math.Clamp(PageSize, 1, MaxPageSize);
-    public int Skip => (SafePage -1 ) * SafePageSize;
+    public int GetSafePage() => Math.Max(Page, 1);
+    public int GetSafePageSize() => Math.Clamp(PageSize, 1, MaxPageSize);
+    public int GetSkip() => (GetSafePage() -1 ) * GetSafePageSize();
 }

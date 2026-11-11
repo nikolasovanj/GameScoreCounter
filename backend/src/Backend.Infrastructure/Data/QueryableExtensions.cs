@@ -10,9 +10,9 @@ public static class QueryableExtensions
         var total = await query.CountAsync(ct);
 
         var items = await query
-                    .Skip(request.Skip)
-                    .Take(request.SafePageSize)
+                    .Skip(request.GetSkip())
+                    .Take(request.GetSafePageSize())
                     .ToListAsync(ct);
-        return new PagedResult<T>(items, request.SafePage, request.SafePageSize, total);
+        return new PagedResult<T>(items, request.GetSafePage(), request.GetSafePageSize(), total);
     }
 }
