@@ -19,7 +19,7 @@ public class UserController(IUserService userService) : ControllerBase
     
     [HttpDelete("{id}")]
     public async Task<ActionResult<ApiResponse>> Delete([FromRoute] Guid id, CancellationToken ct) => 
-        (await _users.DeleteAsync(id, ct)).ToApiResult();
+        (await _users.DeleteAsync(id, ct)).ToNoContentResult();
 
     [HttpGet("id/{id}")]
     public async Task<ActionResult<ApiResponse<UserDTO>>> GetById([FromRoute]Guid id, CancellationToken ct) => 

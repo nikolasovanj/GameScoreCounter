@@ -33,7 +33,7 @@ public class MatchController(IMatchService matchService) : ControllerBase
 
     [HttpDelete("{id}")]
     public async Task<ActionResult<ApiResponse>> Delete([FromRoute] Guid id, CancellationToken ct) => 
-        (await _matches.DeleteAsync(id, ct)).ToApiResult();
+        (await _matches.DeleteAsync(id, ct)).ToNoContentResult();
 
     [HttpGet("me")]
     public async Task<ActionResult<ApiResponse<PagedResult<PlayerMatchResultDTO>>>> GetUsersResults([FromQuery, BindRequired] GameType game, [FromQuery] PageRequest request, CancellationToken ct) =>

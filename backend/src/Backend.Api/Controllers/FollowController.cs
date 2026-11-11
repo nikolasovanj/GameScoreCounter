@@ -16,19 +16,12 @@ namespace Backend.Api.Controllers;
 public class FollowController(IFollowService followService) : ControllerBase
 {
     [HttpPut("{id}/follow")]
-    public async Task<ActionResult<ApiResponse>> Follow([FromRoute]Guid id, CancellationToken ct)
-    {
-        var follower = User.GetUserId();
-        var result = await followService.FollowAsync(follower, id, ct);
-        return result.ToApiResult();
-    }
+    public async Task<ActionResult<ApiResponse>> Follow([FromRoute] Guid id, CancellationToken ct) => 
+        (await followService.FollowAsync(User.GetUserId(), id, ct)).ToNoContentResult();
+
     [HttpDelete("{id}/follow")]
-    public async Task<ActionResult<ApiResponse>> Unfollow([FromRoute] Guid id, CancellationToken ct)
-    {
-        var follower = User.GetUserId();
-        var result = await followService.UnfollowAsync(follower, id, ct);
-        return result.ToApiResult();
-    }
+    public async Task<ActionResult<ApiResponse>> Unfollow([FromRoute] Guid id, CancellationToken ct) =>
+        (await followService.UnfollowAsync(User.GetUserId(), id, ct)).ToNoContentResult();
 
     [HttpGet("followers")]
     public async Task<ActionResult<ApiResponse<PagedResult<UserDTO>>>> GetFollowers([FromQuery] PageRequest request, CancellationToken ct) => 

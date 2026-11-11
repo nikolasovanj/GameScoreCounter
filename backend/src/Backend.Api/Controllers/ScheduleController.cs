@@ -41,7 +41,7 @@ public class ScheduleController(IScheduleService scheduleService) : ControllerBa
     
     [HttpDelete("{id}")]
     public async Task<ActionResult<ApiResponse>> Cancel([FromRoute] Guid id, CancellationToken ct) =>
-        (await scheduleService.CancelAsync(id, User.GetUserId(), ct)).ToApiResult();
+        (await scheduleService.CancelAsync(id, User.GetUserId(), ct)).ToNoContentResult();
 
     [HttpPut("{id}/match")]
     public async Task<ActionResult<ApiResponse<ScheduleController>>> LinkMatch([FromRoute] Guid id, [FromBody] Guid matchId, CancellationToken ct) => 

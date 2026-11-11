@@ -15,7 +15,10 @@ public static class ResultApiExtensions
     {
         return result.IsSuccess ? new OkObjectResult(ApiResponseFactory.Response()) : HandelFailure(result);
     }
-
+    public static ActionResult ToNoContentResult(this Result result)
+    {
+        return result.IsSuccess ? new NoContentResult() : HandelFailure(result);
+    }
     private static ObjectResult HandelFailure(Result result) =>
         result.Error switch
         {
