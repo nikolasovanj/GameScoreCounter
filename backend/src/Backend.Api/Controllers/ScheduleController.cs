@@ -1,5 +1,6 @@
 using Backend.Api.Contracts;
 using Backend.Api.Extenstions;
+using Backend.Application.Common;
 using Backend.Application.DTOs.Requests;
 using Backend.Application.DTOs.Responses;
 using Backend.Application.Interfaces.Services;
@@ -20,8 +21,8 @@ public class ScheduleController(IScheduleService scheduleService) : ControllerBa
         (await scheduleService.CreateAsync(User.GetUserId(), request, ct)).ToApiResult();
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<IReadOnlyList<ScheduleResponse>>>> GetForUser(CancellationToken ct) => 
-        (await scheduleService.ListMineAsync(User.GetUserId(), ct)).ToApiResult();
+    public async Task<ActionResult<ApiResponse<PagedResult<ScheduleResponse>>>> GetForUser([FromQuery]PageRequest request, CancellationToken ct) => 
+        (await scheduleService.ListMineAsync(User.GetUserId(), request, ct)).ToApiResult();
     
     [HttpGet("{id}")]
     public async Task<ActionResult<ApiResponse<ScheduleResponse>>> GetById([FromRoute]Guid id, CancellationToken ct) => 
@@ -44,6 +45,6 @@ public class ScheduleController(IScheduleService scheduleService) : ControllerBa
         (await scheduleService.CancelAsync(id, User.GetUserId(), ct)).ToNoContentResult();
 
     [HttpPut("{id}/match")]
-    public async Task<ActionResult<ApiResponse<ScheduleController>>> LinkMatch([FromRoute] Guid id, [FromBody] Guid matchId, CancellationToken ct) => 
+    public async Task<ActionResult<ApiResponse<ScheduleResponse>>> LinkMatch([FromRoute] Guid id, [FromBody] Guid matchId, CancellationToken ct) => 
         (await scheduleService.LinkMatchAsync(id, User.GetUserId(), matchId, ct)).ToApiResult();
 }

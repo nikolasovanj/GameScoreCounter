@@ -24,10 +24,10 @@ public class FollowService(IFollowRepository followRepository, IUserLookup userL
     }
 
     public async Task<Result<PagedResult<UserDTO>>> GetFollowersAsync(Guid userId, PageRequest request, CancellationToken ct = default) => 
-        (await _follows.GetFollowersAsync(userId, request, ct)).Map(UserMapper.ToDto);
+        (await _follows.GetFollowersAsync(userId, request, ct)).Map(u => u.ToDto());
 
     public async Task<Result<PagedResult<UserDTO>>> GetFollowingAsync(Guid userId, PageRequest request, CancellationToken ct = default) => 
-        (await _follows.GetFollowingAsync(userId, request, ct)).Map(UserMapper.ToDto);
+        (await _follows.GetFollowingAsync(userId, request, ct)).Map(u => u.ToDto());
 
     public async Task<Result> UnfollowAsync(Guid me, Guid target, CancellationToken ct = default)
     {

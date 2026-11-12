@@ -20,7 +20,7 @@ public class UserService(IUserRepository userRepository) : IUserService
     }
 
     public async Task<Result<PagedResult<UserDTO>>> GetAllAsync(PageRequest request, CancellationToken ct = default) => 
-        (await _repo.GetAllAsync(request, ct)).Map(UserMapper.ToDto);
+        (await _repo.GetAllAsync(request, ct)).Map(u => u.ToDto());
 
     public async Task<Result<UserDTO>> GetByUsenameAsync(string username, CancellationToken ct = default)
     {

@@ -1,3 +1,4 @@
+using Backend.Application.Common;
 using Backend.Application.DTOs.Requests;
 using Backend.Application.DTOs.Responses;
 using Backend.Application.Interfaces.Repositories;
@@ -141,8 +142,8 @@ public class ScheduleService(
         return schedule.ToResponse();
     }
 
-    public async Task<Result<IReadOnlyList<ScheduleResponse>>> ListMineAsync(Guid playerId, CancellationToken ct = default) => 
-        (await _schedules.ListForPlayerAsync(playerId, Now(), ct)).Select(s => s.ToResponse()).ToList();
+    public async Task<Result<PagedResult<ScheduleResponse>>> ListMineAsync(Guid playerId, PageRequest request, CancellationToken ct = default) => 
+        (await _schedules.ListForPlayerAsync(playerId, Now(), request, ct)).Map(s => s.ToResponse());
 
     public async Task<Result<ScheduleResponse>> RescheduleAsync(Guid scheduleId, Guid organizerId, RescheduleRequest request, CancellationToken ct = default)
     {

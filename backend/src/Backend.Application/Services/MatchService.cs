@@ -84,14 +84,12 @@ public class MatchService(IMatchRepository matchRepository, IEnumerable<IScoring
 
     public async Task<Result<PagedResult<MatchResponse>>> GetForUserByGameAsync(Guid userId, GameType game, PageRequest request, CancellationToken ct = default)
     {
-        return (await _repo.GetByUserIdForGameAsync(userId, game, request, ct)).Map(MatchMapper.ToResponse);
+        return (await _repo.GetByUserIdForGameAsync(userId, game, request, ct)).Map(m => m.ToResponse());
     }
 
     public async Task<Result<PagedResult<PlayerMatchResultDTO>>> GetPlayerResultsAsync(Guid userId, GameType game, PageRequest request, CancellationToken ct = default)
     {
         var res = await _repo.PlayerResultByGameAsync(userId, game, request, ct);
-        Console.WriteLine("Test");
-        Console.WriteLine(res.Items.Count);
         
         return res;
     }
