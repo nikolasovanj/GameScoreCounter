@@ -1,6 +1,6 @@
 import axios from "axios";
 import { apiErr, type ApiResponse, authHeader, type ApiPromise } from "../../helpers/api/api";
-import type { UserDto } from "../../models/user/UserDto";
+import type { UserDto } from "../../models/UserDtos";
 import type { PageRequest, Page } from "../../types/Pagination";
 import type { IUserApiService } from "../interfaces/IUserApiService";
 
@@ -23,7 +23,7 @@ export const userApi : IUserApiService = {
             .catch(e => apiErr(e, "GetByUsername Failed."));
     },
     GetAll: async function (pageRequest: PageRequest): ApiPromise<Page<UserDto>> {
-        return axios.get<ApiResponse<Page<UserDto>>>(`${BASE}?Page=${pageRequest.Page}&PageSize=${pageRequest.PageSize}`, {headers: authHeader()})
+        return axios.get<ApiResponse<Page<UserDto>>>(`${BASE}?page=${pageRequest.Page}&pageSize=${pageRequest.PageSize}`, {headers: authHeader()})
             .then(r => r.data)
             .catch(e => apiErr(e, "GetAll failed."));
     }
