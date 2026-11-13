@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json.Serialization;
 using Backend.Application;
 using Backend.Infrastructure;
 using Backend.Infrastructure.Options;
@@ -30,7 +31,8 @@ builder.Services
     });    
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -69,7 +71,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();      // UI at /swagger
 
 }
-app.UseHttpsRedirection();
+builder.Services.AddCors(o => o.AddPolicy("web", p =>
+    p.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod()));
+
+app.UseCors("web");
 
 app.UseAuthentication();
 app.UseAuthorization();
