@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import type { AuthContextType } from "../../types/auth/AuthContext";
 import type { AuthUser } from "../../types/auth/AuthUser";
 import type { JwtTokenClaims } from "../../types/auth/JwtTokenClaims";
+import type { AuthResponse } from "../../types/auth/AuthResponse";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const KEY = "authToken";
@@ -50,7 +51,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<AuthUser | null>(initial.user);
   const [isLoading] = useState(false);
 
-  const login = (t: string) => {
+  const login = (response: AuthResponse) => {
+    const t = response.token;
     const claims = decode(t);
     if (!claims || expired(t)) return;
 

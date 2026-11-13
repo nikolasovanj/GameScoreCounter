@@ -10,7 +10,7 @@ const BASE = import.meta.env.VITE_API_URL + "match";
 export const matchApi: IMatchApiService = {
     Create: async function (request: CreateMatchRequest): ApiPromise<MatchDto> {
         return axios.post<ApiResponse<MatchDto>>(`${BASE}`,
-            {request}, 
+            request, 
             {headers: authHeader()})
             .then(r => r.data)
             .catch(e => apiErr(e, "Create failed."));

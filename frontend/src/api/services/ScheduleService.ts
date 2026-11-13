@@ -9,7 +9,7 @@ const BASE = import.meta.env.VITE_API_URL + "schedule";
 
 export const scheduleApi : IScheduleService = {
     Create: async function (request: CreateScheduleRequest): ApiPromise<ScheduleDto> {
-        return axios.post<ApiResponse<ScheduleDto>>(`${BASE}`, {request}, {headers: authHeader()})
+        return axios.post<ApiResponse<ScheduleDto>>(`${BASE}`, request, {headers: authHeader()})
             .then(r => r.data)
             .catch(e => apiErr(e, "Create failed"));
     },
@@ -34,7 +34,7 @@ export const scheduleApi : IScheduleService = {
             .catch(e => apiErr(e, "Respond failed."));
     },
     Reschedule: async function (id: string, request: RescheduleRequest): ApiPromise<ScheduleDto> {
-        return axios.put<ApiResponse<ScheduleDto>>(`${BASE}/${id}`, {request}, {headers: authHeader()})
+        return axios.put<ApiResponse<ScheduleDto>>(`${BASE}/${id}`, request, {headers: authHeader()})
             .then(r => r.data)
             .catch(e => apiErr(e, "Reschedule failed"));
     },

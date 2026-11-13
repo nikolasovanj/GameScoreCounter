@@ -8,11 +8,11 @@ const BASE = import.meta.env.VITE_API_URL + "auth";
 
 export const authApi: IAuthAPIService = {
     login: async function (request: LoginRequest): ApiPromise<AuthResponse> {
-        return axios.post<ApiResponse<AuthResponse>>(`${BASE}/login`, {request})
+        return axios.post<ApiResponse<AuthResponse>>(`${BASE}/login`, request)
             .then(r => r.data).catch(e => apiErr(e, "Login failed."));
     },
     register: async function (request: RegisterRequest): ApiPromise<AuthResponse> {
-        return axios.post<ApiResponse<AuthResponse>>(`${BASE}/register`, {request})
+        return axios.post<ApiResponse<AuthResponse>>(`${BASE}/register`, request)
             .then(r => r.data).catch(e => apiErr(e, "Register failed."));
     }
 };
