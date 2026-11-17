@@ -14,4 +14,5 @@ public interface IMatchService
     Task<Result<PagedResult<MatchResponse>>> GetForUserByGameAsync(Guid userId, GameType game, PageRequest request, CancellationToken ct = default);
     Task<Result> DeleteAsync(Guid id, CancellationToken ct = default);
     Task<Result<PagedResult<PlayerMatchResultDTO>>> GetPlayerResultsAsync(Guid userId, GameType game, PageRequest request, CancellationToken ct = default);
+    Task<Result<IReadOnlyList<GameStatsDTO>>> GetPlayerStatsAsync(Guid userId, CancellationToken ct = default);
 }

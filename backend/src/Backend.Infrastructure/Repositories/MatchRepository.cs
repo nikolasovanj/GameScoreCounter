@@ -37,7 +37,26 @@ namespace Backend.Infrastructure.Repositories
                     .Where(m => m.Game == game && m.Results.Any(r => r.UserId.Equals(userId)))
                     .ToPagedResultAsync(page, ct);
 
-        
+        public async Task<List<GameStatsDTO>> GetPlayerStatsAsync(Guid userId, CancellationToken ct = default)
+        {
+            var rows = await db.MatchResults.AsNoTracking()
+                                .Where(r => r.UserId.Equals(userId))
+                                .Join(db.Matches, r => r.MatchId, m => m.MatchId, (r, m) => new {m.Game, r.IsWinner, r.TotalScore})
+                                .GroupBy(x => x.Game)
+                                .Select(g => new
+                                {
+                                    Game = g.Key,
+                                    Played = g.Count(),
+                                    Won = g.Count(x => x.IsWinner),
+                                    Average = g.Average(x => (double?) x.TotalScore)
+                                })
+                                .ToListAsync(ct);
+
+            return [.. rows.OrderBy(r => r.Game.ToString())
+                            .Select(r => new GameStatsDTO(r.Game, r.Played, r.Won, r.Average))];
+            
+        }
+
         public Task<PagedResult<PlayerMatchResultDTO>> PlayerResultByGameAsync(Guid userId, GameType game, PageRequest page, CancellationToken ct = default) =>
             db.MatchResults.AsNoTracking()
                 .Where(r => r.UserId.Equals(userId))

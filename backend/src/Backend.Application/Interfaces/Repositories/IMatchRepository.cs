@@ -12,4 +12,5 @@ public interface IMatchRepository
     Task<PagedResult<Match>> GetByUserIdForGameAsync(Guid userId, GameType game, PageRequest page, CancellationToken ct = default);
     Task<bool> DeleteAsync(Guid id, CancellationToken ct = default);
     Task<PagedResult<PlayerMatchResultDTO>> PlayerResultByGameAsync(Guid userId, GameType game, PageRequest page, CancellationToken ct = default);
+    Task<List<GameStatsDTO>> GetPlayerStatsAsync(Guid userId, CancellationToken ct = default);
 }

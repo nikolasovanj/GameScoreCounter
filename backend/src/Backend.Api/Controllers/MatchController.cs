@@ -39,4 +39,8 @@ public class MatchController(IMatchService matchService) : ControllerBase
     public async Task<ActionResult<ApiResponse<PagedResult<PlayerMatchResultDTO>>>> GetUsersResults([FromQuery, BindRequired] GameType game, [FromQuery] PageRequest request, CancellationToken ct) =>
         (await _matches.GetPlayerResultsAsync(User.GetUserId(), game, request, ct)).ToApiResult();
 
+    [HttpGet("user/{userId:guid}/stats")]
+    public async Task<ActionResult<ApiResponse<IReadOnlyList<GameStatsDTO>>>> GetUsersStats([FromRoute] Guid userId, CancellationToken ct) => 
+        (await _matches.GetPlayerStatsAsync(userId, ct)).ToApiResult();
+
 }

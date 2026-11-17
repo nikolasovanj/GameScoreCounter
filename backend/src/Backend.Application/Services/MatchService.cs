@@ -93,4 +93,10 @@ public class MatchService(IMatchRepository matchRepository, IEnumerable<IScoring
         
         return res;
     }
+
+    public async Task<Result<IReadOnlyList<GameStatsDTO>>> GetPlayerStatsAsync(Guid userId, CancellationToken ct = default)
+    {
+        var res = await _repo.GetPlayerStatsAsync(userId, ct);
+        return res;
+    }
 }
