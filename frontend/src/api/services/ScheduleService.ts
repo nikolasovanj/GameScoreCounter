@@ -24,7 +24,7 @@ export const scheduleApi : IScheduleService = {
             .catch(e => apiErr(e, "GetById failed."));
     },
     InvitePlayers: async function (id: string, request: InviteRequest): ApiPromise<ScheduleDto> {
-        return axios.post<ApiResponse<ScheduleDto>>(`${BASE}/${id}/invitations`, {request}, {headers: authHeader()})
+        return axios.post<ApiResponse<ScheduleDto>>(`${BASE}/${id}/invitations`, request, {headers: authHeader()})
             .then(r => r.data)
             .catch(e => apiErr(e, "InvitePlayers failed"));
     },
