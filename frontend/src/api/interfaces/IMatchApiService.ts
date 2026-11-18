@@ -1,5 +1,5 @@
 import type { ApiPromise } from "../../helpers/api/api";
-import type { MatchDto, PlayerMatchResultDto } from "../../models/MatchDtos";
+import type { MatchDto, PlayerMatchResultDto, PlayerStatsDto } from "../../models/MatchDtos";
 import type { Page, PageRequest } from "../../types/Pagination";
 import type { CreateMatchRequest } from "../../types/Requests";
 
@@ -9,4 +9,5 @@ export interface IMatchApiService {
     GetForUser(userId: string, game: string, request: PageRequest): ApiPromise<Page<MatchDto>>;
     Delete(id: string): ApiPromise;
     GetUsersResults(game: string, request: PageRequest): ApiPromise<Page<PlayerMatchResultDto>>;
+    GetUsersStats(userId: string): ApiPromise<PlayerStatsDto[]>
 }

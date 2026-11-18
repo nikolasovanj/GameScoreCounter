@@ -23,3 +23,9 @@ export type PlayerMatchResultDto = {
     totalScore?: number,
     components: ScoreComponentDto[]
 }
+export type PlayerStatsDto = {
+    game: string,
+    matchesPlayed: number,
+    matchesWon: number,
+    averagePoints?: number 
+}
