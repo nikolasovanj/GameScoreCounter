@@ -1,10 +1,12 @@
+import { authApi } from "../../api/services/AuthApiService";
+import RegisterForm from "../../components/auth/RegisterForm";
 
 
 export default function RegisterPage() {
 
     return (
         <div className="">
-           Register Page
+           <RegisterForm authApi={authApi}/>
         </div>
     );
 }

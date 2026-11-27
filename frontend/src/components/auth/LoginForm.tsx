@@ -37,6 +37,7 @@ export default function LoginForm({authApi}: {authApi: IAuthAPIService}) {
                                 htmlFor={usernameKey}>Username</label>
                             <input className="w-full text-green-300 border-2 border-blue-400/40 rounded-md focus:outline-0 focus:border-indigo-500 transition-colors py-1 px-2"
                                 key={usernameKey}
+                                required
                                 type="text"
                                 value={username}
                                 onChange={e => setUsername(e.target.value)}/>
@@ -48,6 +49,7 @@ export default function LoginForm({authApi}: {authApi: IAuthAPIService}) {
                                 htmlFor={passwordKey}>Password</label>
                             <input className="w-full text-green-300 border-2 border-blue-400/40 rounded-md focus:outline-0 focus:border-indigo-500 transition-colors py-1 px-2"
                                 key={passwordKey}
+                                required
                                 type="password"
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}/>
